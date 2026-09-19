@@ -7,7 +7,7 @@
   "description": "something",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start" : "node server.js",
     "dev": "nodemon -r  dotenv/config --experimental-json-modules server.js"
   },
   "author": "",

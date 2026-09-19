@@ -1,4 +1,69 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Note</title>
+  <link rel="stylesheet" href="/src/App.css">
+
+</head>
+
+<body>
+  <header>
+    <nav class="navber">
+      <div class="navdiv">
+        <div class="logo"><a href="#">BlueLine</a> </div>
+
+        <ul>
+          <li> <a href="#">Home</a></li>
+          <li> <a href="#">About</a></li>
+          <li> <a href="#">contact</a></li>
+          <li> <a href="#">Survice</a></li>
+          <button><a href="#">Sign in</a></button>
+          <button><a href="#">Sign Up</a></button>
+        </ul>
+      </div>
+  </header>
+
+  <main>
+    <section class="sectionfirst">
+      <div class="leftdiv">
+        Hi, My Name is <span class="colorid">devdas Barman</span> I am a Passionate Hacker
+        <span id="element"></span>
+      </div>
+
+      <div class="rightdiv">
+        <img src="/images/developer.png" alt="">
+      </div>
+    </section>
+  </main>
+
+
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <script>
+    var typed = new Typed('#element', {
+      strings: ['Web Developer', 'Engneer', 'Security Researcher', 'Web Designer', 'Vedio Editor'],
+      typeSpeed: 50,
+    });
+  </script>
+
+  <footer>
+    <div>
+      <h2> Get Notes</h2>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>
+
+
+
+
+
+<!-- <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,4 +75,4 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
-</html>
+</html> -->
