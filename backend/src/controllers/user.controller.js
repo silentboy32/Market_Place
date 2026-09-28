@@ -31,7 +31,7 @@ const generateAccessTokenAndRefreshToken = async(userId) => {
 // User Registered code here
 const UserRegister = asyncHandler(async (req, res) => {
     // Get user details from frontend
-    // All fields Requered 
+    // All fields Requered                                                                                
     // Check if user already exist 
     // Remove password and refresh token field from response 
     // return response
@@ -140,6 +140,7 @@ const UserLogin = asyncHandler( async (req, res) => {
 
 })
 
+// User LoggedOut here 
 
 const UserLoggedOut = asyncHandler( async (req , res ) => {
 
@@ -170,11 +171,37 @@ const UserLoggedOut = asyncHandler( async (req , res ) => {
 })
 
 
+// Get User Data or User Profile
+
+const GetProfile = asyncHandler( async(req, res, next) => {     
+
+
+     const user = await User.findById(req.user._id)
+        .select("-password -refreshToken");
+
+
+    
+    if (!user) {
+        return res.status(404).json({
+            success: false,
+            message: "User not found"
+        });
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, user)
+    );
+    // return res.status(200).json(
+    //     new ApiResponse(200, "User Got Successfully !!")
+    // )
+});
+
 
 export {
     UserRegister,
     UserLogin,
-    UserLoggedOut
+    UserLoggedOut,
+    GetProfile
 }
 
 
