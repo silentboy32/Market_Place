@@ -124,7 +124,8 @@ const UserLogin = asyncHandler( async (req, res) => {
     const options = {
         httpOnly : true,
         secure : true,
-	sameSite: "none"
+	sameSite: "none",
+	partitioned: true, // Opt-in to CHIPS
     }
 
     return res.status(200)
@@ -158,7 +159,10 @@ const UserLoggedOut = asyncHandler( async (req , res ) => {
 
     const options = {
         httpOnly : true,
-        secure : true
+        secure : true,
+	sameSite: "none",
+        partitioned: true // Opt-in to CHIPS
+
     }
 
     return res
@@ -198,11 +202,35 @@ const GetProfile = asyncHandler( async(req, res, next) => {
 });
 
 
+const getAllContacts = asyncHandler(async (req, res) => {
+
+    console.log("🔥 getAllContacts controller called");
+
+    const loggedInUser = req.user._id;
+
+    const filteredUsers = await User.find({
+        _id: {
+            $ne: loggedInUser
+        }
+    }).select("-password -refreshToken");
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {
+                filteredUsers
+            },
+            "Users Fetched Successfully !!"
+        )
+    );
+});
+
 export {
     UserRegister,
     UserLogin,
     UserLoggedOut,
-    GetProfile
+    GetProfile,
+    getAllContacts
 }
 
 

@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 import path from "path";
 import messageRoutes from "./routes/message.route.js";
-
+import conversationRouter from "./routes/conversation.routes.js";
 
 
 // Permisions to access server API
@@ -31,6 +31,8 @@ app.use(express.urlencoded({ extended: true , limit:"16kb"}));
 
 app.use("/api/v1/users", userRouter );
 app.use("/api/v1/message" , messageRoutes );
+app.use("/api/v1/conversations", conversationRouter );
+
 
 
 
