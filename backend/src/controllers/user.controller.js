@@ -202,9 +202,7 @@ const GetProfile = asyncHandler( async(req, res, next) => {
 });
 
 
-const getAllContacts = asyncHandler(async (req, res) => {
-
-    console.log("🔥 getAllContacts controller called");
+const getAllContacts = asyncHandler(async (req, res) => {  
 
     const loggedInUser = req.user._id;
 
@@ -225,12 +223,44 @@ const getAllContacts = asyncHandler(async (req, res) => {
     );
 });
 
+
+
+const SearchUsers = asyncHandler(async (req, res) => {
+    const loggedInUser = req.user._id;
+    const { query } = req.query;
+
+    if (!query || !query.trim()) {
+        throw new ApiError(400, "Search query is required !!");
+    }
+
+    const searchQuery = query.trim();
+
+    const users = await User.find({
+        _id: { $ne: loggedInUser },
+        $or: [
+            { username: { $regex: searchQuery, $options: "i" } },
+            { fullname: { $regex: searchQuery, $options: "i" } }
+        ]
+    })
+        .select("-password -refreshToken")
+        .limit(10);
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            { users },
+            "Users Fetched Successfully !!"
+        )
+    );
+});
+
+
 export {
     UserRegister,
     UserLogin,
     UserLoggedOut,
     GetProfile,
-    getAllContacts
+    SearchUsers,
 }
 
 
