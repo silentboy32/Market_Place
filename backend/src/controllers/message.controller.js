@@ -196,8 +196,9 @@ const deleteMessage = asyncHandler(async (req, res) => {
 
     // Delete for everyone
     // Delete for everyone
-    if (deleteFor === "everyone") {
 
+    // Delete for everyone
+    if (deleteFor === "everyone") {
         // Only the original sender can delete for everyone
         if (message.sender.toString() !== userId.toString()) {
             throw new ApiError(
@@ -219,14 +220,66 @@ const deleteMessage = asyncHandler(async (req, res) => {
 
         await message.save();
 
-    } else {
+        // Notify both participants who are connected to this conversation
+        const io = req.app.get("io");
 
-        // Delete for me — including an already-deleted placeholder
+        io.to(conversationId).emit("message_updated", {
+            conversationId,
+            messageId: message._id.toString(),
+            content: message.content,
+            isDeletedForEveryone: true,
+        });
+    } else {
+        // Delete for me
         await Message.updateOne(
             { _id: messageId },
             { $addToSet: { deletedFor: userId } }
         );
+
+        // Notify only the user who requested this deletion
+        const io = req.app.get("io");
+
+        io.to(`user:${userId.toString()}`).emit(
+            "message_deleted_for_me",
+            {
+                conversationId,
+                messageId: message._id.toString(),
+            }
+        );
     }
+
+
+    // if (deleteFor === "everyone") {
+
+    //     // Only the original sender can delete for everyone
+    //     if (message.sender.toString() !== userId.toString()) {
+    //         throw new ApiError(
+    //             403,
+    //             "Only the sender can delete this message for everyone !!"
+    //         );
+    //     }
+
+    //     if (message.isDeletedForEveryone) {
+    //         throw new ApiError(
+    //             400,
+    //             "Message is already deleted for everyone !!"
+    //         );
+    //     }
+
+    //     message.content = "This message was deleted";
+    //     message.isDeletedForEveryone = true;
+    //     message.deletedFor = [];
+
+    //     await message.save();
+
+    // } else {
+
+        // Delete for me — including an already-deleted placeholder
+    //     await Message.updateOne(
+    //         { _id: messageId },
+    //         { $addToSet: { deletedFor: userId } }
+    //     );
+    // }
 
 
 

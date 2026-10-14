@@ -1,20 +1,26 @@
-import { app } from "./src/app.js";
 import dotenv from "dotenv";
+import { createServer } from "node:http";
+
 import { connectedDB } from "./src/db/database.js";
+import { initializeSocket } from "./src/socket/socket.io.js";
+
+dotenv.config({ path: "./.env" });
+
+const { app } = await import("./src/app.js");
+
+const startServer = async () => {
+    await connectedDB();
+
+    const httpServer = createServer(app);
+
+    initializeSocket(httpServer, app);
+
+    httpServer.listen(process.env.PORT);
+};
+
+await startServer();
 
 
-dotenv.config({
-    path:"./.env"
-})
 
 
-connectedDB()
-.then((result) => {
-    app.listen(process.env.PORT , () => {
-        console.log(`Server is Running on 127.0.0.1:${process.env.PORT}`)
-    })
-    
-}).catch((err) => {
-    console.log("Something Went wrong :",err)
-});
 
