@@ -50,6 +50,7 @@ const initializeSocket = (httpServer, app) => {
                 io.to(`user:${contactId}`).emit("contact_status", {
                     userId,
                     isOnline,
+                    statuses,
                 });
             }
         } catch {
