@@ -5,7 +5,13 @@ const app = express();
 import path from "path";
 import messageRoutes from "./routes/message.route.js";
 import conversationRouter from "./routes/conversation.routes.js";
+import Status_Monitor from "express-status-monitor";
 
+
+
+// Monitor your backend memories
+
+// app.use(Status_Monitor());
 
 // Permisions to access server API
 app.use(cors({
@@ -32,8 +38,6 @@ app.use(express.urlencoded({ extended: true , limit:"16kb"}));
 app.use("/api/v1/users", userRouter );
 app.use("/api/v1/message" , messageRoutes );
 app.use("/api/v1/conversations", conversationRouter );
-
-
 
 
 
